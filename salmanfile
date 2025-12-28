@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/Inzemamskillops/Autumation-.git'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sshagent(['nginx-server']) {
+                    sh '''
+                        scp -o StrictHostKeyChecking=no index.html \
+                        ubuntu@3.110.223.118:/var/www/html/
+                    '''
+                }
+            }
+        }
+    }
+}
